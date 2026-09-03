@@ -1,0 +1,53 @@
+name: generate-profile-assets
+
+# 每日拉取真实 GitHub 数据，渲染双主题 SVG 资产并提交到 main。
+# 失败时不提交（保留上次成功产物）。设计规格见 docs/design-system.md。
+
+on:
+  schedule:
+    - cron: "23 21 * * *" # 每日 05:23（UTC+8）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: generate-profile-assets
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 提交前先过门禁：测试 + 离线校验失败则整个 workflow 失败，不污染 main
+      - name: Verify (tests + offline gate)
+        run: |
+          npm ci
+          npm test
+          npm run check
+
+      - name: Generate assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USER: ${{ github.repository_owner }}
+          TZ_OFFSET: "8"
+        run: node scripts/generate.mjs
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/generated
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Generate profile assets"
+            git push
+          fi

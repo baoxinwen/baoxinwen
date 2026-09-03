@@ -1,0 +1,30 @@
+name: generate-snake
+
+on:
+  schedule:
+    - cron: "12 0 * * 0" # 每周日 00:12 UTC，周调度（NFR4）
+  workflow_dispatch: # 允许手动触发
+
+permissions:
+  contents: write # 推送 output 分支所需（架构文档 §7）
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 生成贪吃蛇（浅色 + 深色）
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          outputs: |
+            dist/snake-light.svg
+            dist/snake-dark.svg?palette=github-dark
+
+      - name: 推送到 output 分支
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: output
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
