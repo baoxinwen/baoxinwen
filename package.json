@@ -1,0 +1,13 @@
+{
+  "name": "github-profile",
+  "private": true,
+  "description": "baoxinwen 的 GitHub 主页：自绘 SVG 设计系统 + 真实数据生成管线，模板化开源",
+  "license": "MIT",
+  "scripts": {
+    "check": "node scripts/check.mjs",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

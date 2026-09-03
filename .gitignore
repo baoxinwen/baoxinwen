@@ -1,0 +1,25 @@
+# 本地编辑器
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 运行时产物（output 分支由 Action 生成，不进 main）
+dist/
+
+# 依赖
+node_modules/
+
+# brainstorm 会话与设计探索期产物（本地保留，不入库；需要时可从 git 历史找回）
+.superpowers/
+.zcode/
+
+# 设计稿本地构建产物与一次性风格小样构建脚本（不入库）
+design/build-preview.mjs
+design/build-style-picker.mjs
+design/build-color-picker.mjs
+design/color-picker.html
+design/preview.html
+design/readme-preview.html
+design/style-picker.html
+design/*.json
