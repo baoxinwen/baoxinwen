@@ -133,7 +133,7 @@ export function normalize(gql) {
 const QUERY = /* GraphQL */ `
   query($login: String!) {
     user(login: $login) {
-      # 评审 M6：>100 仓库时单页只取 100 个，按星数排序让 STARS 尽量不失真；
+      # >100 仓库时单页只取 100 个，按星数排序让 STARS 尽量不失真；
       # REPOS 用 totalCount 不受影响；语言聚合同批采样，>100 时偏向高星仓库
       repositories(first: 100, ownerAffiliations: OWNER, isFork: false, orderBy: { field: STARGAZERS, direction: DESC }) {
         totalCount
