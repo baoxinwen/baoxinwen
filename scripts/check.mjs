@@ -209,7 +209,11 @@ function main() {
       let badGen = 0;
       for (const f of readdirSync(genDir).filter((x) => x.endsWith('.svg'))) {
         const body = readFileSync(join(genDir, f), 'utf8');
-        if (/NaN|undefined/.test(body) || />—</.test(body)) {
+        // 占位符扫描只看结构性位置：<text>/<title> 承载外部数据文案（博客标题等），
+        // 合法包含字面 "undefined"/"NaN"，剔除后再匹配；坏值漏进
+        // 坐标/属性等结构性位置仍会被命中。占位破折号由渲染器生成，查原文。
+        const structural = body.replace(/<(text|title)\b[^>]*>[\s\S]*?<\/\1>/g, '');
+        if (/NaN|undefined/.test(structural) || />—</.test(body)) {
           badGen += 1;
           fail(`生成的资产含占位符坏值: ${f}（数据管线可能失败后被误提交）`);
         }

@@ -334,6 +334,24 @@ test('生成的资产含占位符坏值（NaN/占位破折号）时失败', () =
   assert.ok(r.stdout.includes('stats.light.svg'), r.stdout);
 });
 
+test('外部博客标题含字面 undefined/NaN 时不误伤（文本内容是合法文案', () => {
+  const f = goodRoot({ after() {} });
+  const titledSvg = '<svg><text x="96" y="70">Why is my state undefined?</text>'
+    + '<text x="96" y="96">NaN 与 JavaScript</text></svg>';
+  f.writeAsset('blog.light.svg', titledSvg);
+  f.writeAsset('blog.dark.svg', titledSvg);
+  const r = runCheck(f.root);
+  assert.equal(r.status, 0, `外部标题不应被判为坏值:\n${r.stdout}${r.stderr}`);
+});
+
+test('结构性位置的坏值仍拦截：属性/坐标中的 undefined 照判红', () => {
+  const f = goodRoot({ after() {} });
+  f.writeAsset('stats.light.svg', '<svg><rect x="undefined" y="60"/><text x="1" y="2">NaN 与 JavaScript</text></svg>');
+  const r = runCheck(f.root);
+  assert.equal(r.status, 1);
+  assert.ok(r.stdout.includes('stats.light.svg'), r.stdout);
+});
+
 test('生成的资产含未解决 git 冲突标记时失败（变基误提交回归）', () => {
   const f = goodRoot({ after() {} });
   f.writeAsset('streak.light.svg', '<svg><defs><<<<<<< HEAD\nx\n=======\ny\n>>>>>>> main</defs></svg>');
