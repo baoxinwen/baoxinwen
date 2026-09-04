@@ -33,9 +33,11 @@ export function parseRssItems(xml, { max = 5, tzOffset = 8 } = {}) {
  * 拉取最新文章。失败抛错由调用方降级；条目为空视为失败（空卡无意义）。
  * @returns {Promise<{title:string, link:string, date:string}[]>}
  */
-export async function fetchBlogPosts({ rssUrl, fetchImpl = fetch, max = 5, tzOffset = 8 }) {
+export async function fetchBlogPosts({ rssUrl, fetchImpl = fetch, max = 5, tzOffset = 8, timeoutMs = 15_000 }) {
+  // signal 超时：上游挂起时快速失败，不等 workflow 级兜底
   const res = await fetchImpl(rssUrl, {
     headers: { 'User-Agent': 'profile-assets-generator', Accept: 'application/rss+xml, application/xml, text/xml' },
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok) throw new Error(`rss HTTP ${res.status}`);
   const posts = parseRssItems(await res.text(), { max, tzOffset });

@@ -8,8 +8,10 @@
 const GRAPHQL_ENDPOINT = 'https://api.github.com/graphql';
 const EVENTS_ENDPOINT = (u, page) => `https://api.github.com/users/${u}/events/public?per_page=100&page=${page}`;
 const TZ_OFFSET = 8; // 北京时间（可用 TZ_OFFSET 环境变量覆盖）
+// 出站请求超时：上游 TCP 挂起时快速失败，不等 workflow 级 5 分钟兜底
+const REQUEST_TIMEOUT_MS = 15_000;
 
-async function graphql(query, variables, token, fetchImpl) {
+async function graphql(query, variables, token, fetchImpl, timeoutMs = REQUEST_TIMEOUT_MS) {
   const res = await fetchImpl(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
@@ -18,6 +20,7 @@ async function graphql(query, variables, token, fetchImpl) {
       'User-Agent': 'profile-assets-generator',
     },
     body: JSON.stringify({ query, variables }),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!res.ok) throw new Error(`GraphQL HTTP ${res.status}`);
   const payload = await res.json();
@@ -66,7 +69,7 @@ export function eventSpanDays(events) {
   return Math.min(90, day(Math.max(...times)) - day(Math.min(...times)) + 1);
 }
 
-async function fetchHours(user, token, fetchImpl, { maxPages = 10, tzOffset = TZ_OFFSET } = {}) {
+async function fetchHours(user, token, fetchImpl, { maxPages = 10, tzOffset = TZ_OFFSET, timeoutMs = REQUEST_TIMEOUT_MS } = {}) {
   const events = [];
   for (let page = 1; page <= maxPages; page++) {
     const res = await fetchImpl(EVENTS_ENDPOINT(user, page), {
@@ -75,6 +78,7 @@ async function fetchHours(user, token, fetchImpl, { maxPages = 10, tzOffset = TZ
         Accept: 'application/vnd.github+json',
         'User-Agent': 'profile-assets-generator',
       },
+      signal: AbortSignal.timeout(timeoutMs),
     });
     if (!res.ok) throw new Error(`events HTTP ${res.status}`);
     const batch = await res.json();
@@ -152,13 +156,13 @@ const QUERY = /* GraphQL */ `
  * 拉取主页所需的全部数据。
  * @returns {Promise<{stars:number, repos:number, contribs:number, langs:{name,pct}[], current:number, longest:number, activeDays:number, bestDay:number, hours:number[]|null, spanDays:number|null, tzOffset:number}>}
  */
-export async function fetchProfileData({ user, token, fetchImpl = fetch, tzOffset = TZ_OFFSET }) {
-  const data = await graphql(QUERY, { login: user }, token, fetchImpl);
+export async function fetchProfileData({ user, token, fetchImpl = fetch, tzOffset = TZ_OFFSET, timeoutMs = REQUEST_TIMEOUT_MS }) {
+  const data = await graphql(QUERY, { login: user }, token, fetchImpl, timeoutMs);
   if (!data.user) throw new Error(`GitHub 用户不存在: ${user}`);
   let hours = null;
   let spanDays = null;
   try {
-    const fetched = await fetchHours(user, token, fetchImpl, { tzOffset });
+    const fetched = await fetchHours(user, token, fetchImpl, { tzOffset, timeoutMs });
     hours = fetched.hours;
     spanDays = fetched.spanDays;
   } catch (e) {

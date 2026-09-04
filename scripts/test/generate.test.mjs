@@ -294,6 +294,37 @@ test('fetchProfileData：用户不存在抛错', async () => {
   await assert.rejects(() => fetchProfileData({ user: 'ghost', token: 't', fetchImpl }), /不存在/);
 });
 
+test('出站请求携带 AbortSignal', async () => {
+  const seen = [];
+  const fetchImpl = async (url, opts) => {
+    seen.push({ url: String(url), signal: opts?.signal });
+    if (String(url).includes('graphql')) {
+      return { ok: true, status: 200, json: async () => ({ data: GQL_FIXTURE }) };
+    }
+    return { ok: true, status: 200, json: async () => [] };
+  };
+  await fetchProfileData({ user: 'x', token: 't', fetchImpl });
+  assert.ok(seen.length >= 2, 'GraphQL 与 events 请求都应发出');
+  for (const s of seen) {
+    assert.ok(s.signal instanceof AbortSignal, `出站请求应带 AbortSignal: ${s.url}`);
+  }
+});
+
+test('上游挂起时按超时快速失败，不等 workflow 级兜底', async () => {
+  // AbortSignal.timeout 的定时器是 unref 的：纯 stub 无真实 I/O 时事件循环会先排空，
+  // 自持一个活跃句柄让 20ms 的 abort 有机会触发（真实 fetch 有在途 socket，无此问题）
+  const keepAlive = setTimeout(() => {}, 1000);
+  try {
+    const hanging = (url, opts) => new Promise((_, reject) => {
+      opts.signal.addEventListener('abort', () => reject(new Error(`request timed out (${opts.signal.reason?.name})`)));
+    });
+    await assert.rejects(() => fetchBlogPosts({ rssUrl: 'https://x/rss', fetchImpl: hanging, timeoutMs: 20 }), /timed out/);
+    await assert.rejects(() => fetchProfileData({ user: 'x', token: 't', fetchImpl: hanging, timeoutMs: 20 }), /timed out/);
+  } finally {
+    clearTimeout(keepAlive);
+  }
+});
+
 /* ------------------------------------------------------------ 博客卡渲染 */
 
 const BLOG_INPUT = {
