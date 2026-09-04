@@ -246,6 +246,31 @@ test('cron 格式非法时失败', () => {
   assert.ok(r.stdout.includes('cron'), r.stdout);
 });
 
+const GEN_YML = GOOD_SNAKE_YML
+  .replace('name: generate-snake', 'name: generate-assets')
+  .replace(/steps:\n[\s\S]*$/, `steps:
+      - uses: actions/checkout@v4
+      - name: Generate
+        run: node scripts/generate.mjs
+      - name: Commit
+        run: git push
+`);
+
+test('生成型 workflow 在 generate 之后未重跑门禁时失败（坏产物未校验即提交', () => {
+  const f = goodRoot({ after() {} });
+  f.writeWorkflow('gen.yml', GEN_YML);
+  const r = runCheck(f.root);
+  assert.equal(r.status, 1);
+  assert.ok(r.stdout.includes('gen.yml'), r.stdout);
+});
+
+test('生成型 workflow 在 generate 之后重跑 check.mjs 时通过', () => {
+  const f = goodRoot({ after() {} });
+  f.writeWorkflow('gen.yml', GEN_YML.replace('- name: Commit', '- name: Gate\n        run: node scripts/check.mjs\n      - name: Commit'));
+  const r = runCheck(f.root);
+  assert.equal(r.status, 0, `生成后重跑门禁应合法:\n${r.stdout}${r.stderr}`);
+});
+
 test('每日 cron（资产/博客同步 NFR4）合法通过', () => {
   const f = goodRoot({ after() {} });
   f.writeWorkflow('daily.yml', GOOD_SNAKE_YML.replace('cron: "12 0 * * 0"', 'cron: "23 21 * * *"'));

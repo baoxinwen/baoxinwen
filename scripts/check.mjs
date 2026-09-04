@@ -282,6 +282,13 @@ function main() {
       }
     }
 
+    // 生成型 workflow 必须在 generate 之后重跑本门禁：只靠入口 Verify 校验的是上一次的
+    // 旧产物，本次生成的坏产物会未校验即提交
+    const genIdx = text.indexOf('scripts/generate.mjs');
+    if (genIdx >= 0 && text.indexOf('scripts/check.mjs', genIdx) < 0) {
+      fail(`${name}: 运行 scripts/generate.mjs 的 workflow 未在生成之后重跑 scripts/check.mjs（坏产物未校验即提交）`);
+    }
+
   const on = JSON.stringify(doc.on ?? {});
   // 五段式：分(0-59) 时(0-23) 日/月/周（* 或数字或区间）；NFR4 允许周调度与博客同步的每日调度
   const FIELD = { min: '(?:[0-5]?\\d)', hour: '(?:[01]?\\d|2[0-3])', dom: '(?:\\*|[1-9]\\d?(?:-[1-9]\\d+)?)', mon: '(?:\\*|[1-9]\\d?(?:-[1-9]\\d+)?)', dow: '(?:\\*|[0-6](?:-[0-6])?)' };

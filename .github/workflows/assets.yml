@@ -40,6 +40,11 @@ jobs:
           TZ_OFFSET: "8"
         run: node scripts/generate.mjs
 
+      # 生成之后、提交之前重跑门禁：本次产出的坏 SVG 当场拦截，不进 main
+      # （入口 Verify 只校验上次产物；此步由 check.mjs 结构规则强制
+      - name: Gate fresh artifacts
+        run: node scripts/check.mjs
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
