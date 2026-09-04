@@ -194,7 +194,8 @@ export function renderFooter(t, { user }) {
   const b = [
     hline(PAD, RIGHT, 20, t.hair),
     text(PAD, 46, `© ${YEAR} ${user}`, { fill: t.muted, family: FONT_MONO, size: 10.5 }),
-    text(RIGHT, 46, 'rendered by github actions · updated daily', { fill: t.muted, family: FONT_MONO, size: 10.5, anchor: 'end' }),
+    // 不写 "updated daily"：GitHub schedule 为尽力而为，实测会缺跑，文案不夸大
+    text(RIGHT, 46, 'rendered by github actions', { fill: t.muted, family: FONT_MONO, size: 10.5, anchor: 'end' }),
   ];
   return svgWrap(W, 64, b.join(''), '页脚');
 }

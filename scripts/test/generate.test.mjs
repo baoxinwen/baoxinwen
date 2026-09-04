@@ -413,6 +413,12 @@ test('页脚与 hero 年份取当前年份（不硬编码）', () => {
   assert.match(all.find((a) => a.name === 'hero' && a.mode === 'light').svg, new RegExp(`open to build · ${year}`));
 });
 
+test('页脚不承诺每日更新（GitHub schedule 为尽力而为，实测会缺跑', () => {
+  const all = renderAll(RENDER_INPUT);
+  const footer = all.find((a) => a.name === 'footer' && a.mode === 'light').svg;
+  assert.ok(!/updated daily/i.test(footer), `页脚不得承诺 updated daily:\n${footer}`);
+});
+
 test('时段图标签反映真实跨度：有数据显示天数，降级显示“近期”', () => {
   const withSpan = renderStreakHours(TOKENS.light, [{ v: '1 天', label: 'l', en: 'e' }], RENDER_INPUT.hours, { tz: 8, spanDays: 10 });
   assert.match(withSpan, /活跃时段 · 近 10 天公开活动/);
