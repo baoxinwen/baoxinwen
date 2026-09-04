@@ -101,6 +101,12 @@ export function renderLangs(t, langs) {
   const { defs, body } = glassSurface(t, 'langs', W, h);
   const b = [defs + body];
   b.push(text(PAD, 38, 'LANGUAGES · BY REPO', { fill: t.muted, family: FONT_MONO, size: 10, ls: 2 }));
+  // 空态：全新账号无公开语言数据时给出说明，不留只有标题的空卡。
+  // 不跳过整卡——README 静态引用 langs.svg，跳卡会重演"引用资产不存在"的门禁死路
+  if (!langs.length) {
+    b.push(text(PAD, 84, 'NO PUBLIC LANGUAGE DATA YET', { fill: t.muted, family: FONT_MONO, size: 11, ls: 1 }));
+    return svgWrap(W, h, b.join(''), '语言构成');
+  }
   const barW = RIGHT - PAD;
   // 按占比总和归一：各段独立四舍五入后总和可为 101~103，
   // 直接按 /100 缩放会让末段越过内容右缘；归一后条形恰好铺满 [PAD, RIGHT]

@@ -542,6 +542,13 @@ test('renderLangs：舍入和超过 100% 时按总和归一，堆叠条不越内
   assert.ok(lastEnd <= 786 + 0.5, `末段右缘 ${lastEnd} 应 <= 786（内容右缘 RIGHT）`);
 });
 
+test('renderLangs：无语言数据时渲染空态文案而非空白卡', () => {
+  const svg = renderLangs(TOKENS.light, []);
+  assert.match(svg, /viewBox="0 0 830 130"/, '保持标准卡高，README 引用不落空');
+  assert.match(svg, /NO PUBLIC LANGUAGE DATA YET/);
+  assert.ok(!/<rect x="44" y="60"/.test(svg), '空态不画堆叠条');
+});
+
 test('renderLangs：行数多时自适应增高，最后一行不贴底边', () => {
   const names = ['TypeScript', 'Python', 'HTML', 'JavaScript', 'Vue', 'CSS', 'Go', 'Rust', 'Shell'];
   const rows = (n) => renderLangs(TOKENS.light, names.slice(0, n).map((name, i) => ({ name, pct: i ? 1 : 92 })));
