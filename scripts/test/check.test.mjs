@@ -85,7 +85,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: 生成贪吃蛇
-        uses: Platane/snk/svg-only@v3
+        uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b # v3
         with:
           github_user_name: \${{ github.repository_owner }}
           outputs: |
@@ -93,7 +93,7 @@ jobs:
             dist/snake-dark.svg?palette=github-dark
 
       - name: 推送到 output 分支
-        uses: crazy-max/ghaction-github-pages@v4
+        uses: crazy-max/ghaction-github-pages@df5cc2bfa78282ded844b354faee141f06b41865 # v4
         with:
           target_branch: output
           build_dir: dist
@@ -216,10 +216,20 @@ test('YAML 语法错误时干净报错、不吐堆栈（非法输入类）', () 
 
 test('使用白名单之外的 Action 时失败', () => {
   const f = goodRoot({ after() {} });
-  f.writeWorkflow('evil.yml', GOOD_SNAKE_YML.replace('Platane/snk/svg-only@v3', 'evil/action@v1'));
+  f.writeWorkflow('evil.yml', GOOD_SNAKE_YML.replace(/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b \# v3/, 'svg-only@evil-branch'));
   const r = runCheck(f.root);
   assert.equal(r.status, 1);
-  assert.ok(r.stdout.includes('evil/action@v1'), r.stdout);
+  assert.ok(r.stdout.includes('evil'), r.stdout);
+});
+
+test('第三方 action 以可变 tag 引用时失败（须 pin 到 commit SHA', () => {
+  const f = goodRoot({ after() {} });
+  f.writeWorkflow('tag.yml', GOOD_SNAKE_YML
+    .replace(/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b \# v3/, 'svg-only@v3')
+    .replace(/ghaction-github-pages@df5cc2bfa78282ded844b354faee141f06b41865 \# v4/, 'ghaction-github-pages@v4'));
+  const r = runCheck(f.root);
+  assert.equal(r.status, 1);
+  assert.ok(r.stdout.includes('tag.yml'), r.stdout);
 });
 
 test('workflow 缺 permissions: contents: write 时失败', () => {

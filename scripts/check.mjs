@@ -14,8 +14,10 @@ const USAGE = `用法: node scripts/check.mjs [--root <目录>] [--remote]
 const ALLOWED_ACTIONS = [
   'actions/checkout@v4',
   'actions/setup-node@v4',
-  'Platane/snk/svg-only@v3',
-  'crazy-max/ghaction-github-pages@v4',
+  // 第三方 action 只认 pin 到 commit SHA 的不可变引用：
+  // 可变 tag 可被上游移动，白名单随 SHA 升级而更新
+  'Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b', // v3
+  'crazy-max/ghaction-github-pages@df5cc2bfa78282ded844b354faee141f06b41865', // v4
 ];
 
 // NFR4：Actions workflow 数量上限

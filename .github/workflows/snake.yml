@@ -14,7 +14,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: 生成贪吃蛇（浅色 + 深色）
-        uses: Platane/snk/svg-only@v3
+        # pin 到 commit SHA：可变 tag 是供应链移动靶，升级时白名单同步换 SHA
+        uses: Platane/snk/svg-only@d8f6715049803e982ee5ff501b6b9b7d5deeb09b # v3
         with:
           github_user_name: ${{ github.repository_owner }}
           outputs: |
@@ -22,7 +23,7 @@ jobs:
             dist/snake-dark.svg?palette=github-dark
 
       - name: 推送到 output 分支
-        uses: crazy-max/ghaction-github-pages@v4
+        uses: crazy-max/ghaction-github-pages@df5cc2bfa78282ded844b354faee141f06b41865 # v4
         with:
           target_branch: output
           build_dir: dist
