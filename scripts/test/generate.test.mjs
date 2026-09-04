@@ -101,6 +101,16 @@ test('parseRssItems：CDATA/普通标题、pubDate 按时区归日、坏条目�
   assert.deepEqual(parseRssItems(RSS_XML, { max: 2, tzOffset: 8 }).map((i) => i.title), ['甲：CDATA 标题', '乙：普通标题']);
 });
 
+test('parseRssItems：XML 实体解码一次后再入卡', () => {
+  const xml = `<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel>
+<item><title>汤姆 &amp; 杰瑞 &#39;s &#x4E16;界</title><link>https://xsfly.com/e</link><pubDate>Mon, 31 Aug 2026 17:30:00 +0000</pubDate></item>
+<item><title>A &amp;amp; B（双重转义只解一层）</title><link>https://xsfly.com/f</link><pubDate>Mon, 31 Aug 2026 17:30:00 +0000</pubDate></item>
+</channel></rss>`;
+  const items = parseRssItems(xml, { max: 5, tzOffset: 8 });
+  assert.equal(items[0].title, "汤姆 & 杰瑞 's 世界", '命名/十进制/十六进制实体各解码一次');
+  assert.equal(items[1].title, 'A &amp; B（双重转义只解一层）', '只解一层，不迭代解码');
+});
+
 test('fetchBlogPosts：HTTP 失败与空条目都抛错（由调用方降级跳卡）', async () => {
   await assert.rejects(
     () => fetchBlogPosts({ rssUrl: 'https://x/rss', fetchImpl: async () => ({ ok: false, status: 503 }) }),

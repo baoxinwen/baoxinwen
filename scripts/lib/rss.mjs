@@ -3,6 +3,17 @@
  * 仅服务博客卡这一次要数据：拉取失败由调用方降级（保留上次产物，不阻塞其它卡片）。
  */
 
+// XML 实体解码：标题常含 &amp; &#39; 等，不解码会经渲染层 esc() 二次转义、
+// 卡面显示字面原文。先数字后命名、各单次扫描——"&amp;#39;" 只解出一层 "&amp;#" 不被
+// 迭代展开；越界码点不产出字符。解出的原始文本交渲染层 esc() 重编码。
+const NAMED_ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: '\u00A0' };
+const fromCodePoint = (cp) => (cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : '');
+const decodeEntities = (s) =>
+  s
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, d) => fromCodePoint(Number(d)))
+    .replace(/&([a-z]+);/gi, (_, name) => NAMED_ENTITIES[name.toLowerCase()] ?? `&${name};`);
+
 /** RSS XML → [{ title, link, date:'MM-DD' }]（纯函数；时间按 UTC+offset 归日） */
 export function parseRssItems(xml, { max = 5, tzOffset = 8 } = {}) {
   const items = [];
@@ -11,7 +22,7 @@ export function parseRssItems(xml, { max = 5, tzOffset = 8 } = {}) {
     const pick = (tag) => {
       const t = block.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`));
       if (!t) return '';
-      return t[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim();
+      return decodeEntities(t[1].replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim());
     };
     const title = pick('title');
     const link = pick('link');
