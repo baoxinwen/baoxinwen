@@ -304,6 +304,19 @@ test('fetchProfileData：用户不存在抛错', async () => {
   await assert.rejects(() => fetchProfileData({ user: 'ghost', token: 't', fetchImpl }), /不存在/);
 });
 
+test('仓库查询按星数排序取前 100（>100 仓库时 STARS 口径尽量一致', async () => {
+  let query = '';
+  const fetchImpl = async (url, opts) => {
+    if (String(url).includes('graphql')) {
+      query = JSON.parse(opts.body).query;
+      return { ok: true, status: 200, json: async () => ({ data: GQL_FIXTURE }) };
+    }
+    return { ok: true, status: 200, json: async () => [] };
+  };
+  await fetchProfileData({ user: 'x', token: 't', fetchImpl });
+  assert.match(query, /orderBy:\s*\{\s*field:\s*STARGAZERS,\s*direction:\s*DESC\s*\}/, 'repositories 应带 orderBy STARGAZERS');
+});
+
 test('出站请求携带 AbortSignal', async () => {
   const seen = [];
   const fetchImpl = async (url, opts) => {
