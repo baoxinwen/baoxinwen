@@ -2,7 +2,7 @@
   <a href="https://xsfly.com">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/generated/hero.dark.svg" />
-      <img src="assets/generated/hero.light.svg" alt="baoxinwen —— 后端工程师 · 自托管工具匠人" width="100%" />
+      <img src="assets/generated/hero.light.svg" alt="baoxinwen —— 测试工程师 · 独立开发者" width="100%" />
     </picture>
   </a>
 </p>
@@ -12,9 +12,10 @@
   <img src="assets/generated/hd-about.light.svg" alt="01 · 关于" width="100%" />
 </picture>
 
-- 🔭 正在折腾：给自己用的自托管小工具——旅行足迹地图、目录树复制、热搜监控
+- 🔭 本职是测试工程师：软件质量保障与自动化测试，把复杂系统测得更可靠
+- 🛠️ 业余是独立开发者：把真实问题做成好用的工具——CopyTree、PromptMate、hotsearch-monitor
 - 🌱 在学：Rust（下一批工具的语言）
-- 📫 找到我：GitHub Issue / Discussion · 博客 [浮生闲记](https://xsfly.com)
+- ✍️ 在写：[浮生闲记](https://xsfly.com)——技术教程与生活随笔
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/generated/hd-stack.dark.svg" />

@@ -15,7 +15,7 @@
 | 1 | 用户名 | 全局 | 编辑器里全局替换 `baoxinwen` → 你的用户名（README 项目卡/贪吃蛇/访客徽章；资产生成与门禁自动取 `repository_owner`/git remote，无需改脚本） |
 | 2 | 头图链接 | README 头图区的 `<a href="https://xsfly.com">` | 默认链到作者的博客——换成你的站点 URL，或删掉 `<a>` 包裹只留 `<picture>` |
 | 3 | 头图文案 | `scripts/generate.mjs` 的 `CONTENT.hero` | taglines（第一行常驻展示，其余轮换）与 meta 表（blog / focus / lang） |
-| 4 | 近况三行 | README 介绍区 | 🔭 正在做 / 🌱 在学 / 📫 联系方式 |
+| 4 | 近况列表 | README 介绍区 | 按你的真实身份写几行：🔭 本职 / 🛠️ 业余 / 🌱 在学 / ✍️ 在写 |
 | 5 | 技术栈图标 | README 技术栈区 | [skill-icons 图标 id 列表](https://skillicons.dev)（`theme=light` 与 `theme=dark` 两处同步改） |
 | 6 | 精选项目 | `scripts/generate.mjs` 的 `CONTENT.projects` + README 项目卡链接 | 4 个项目（名字/描述/技术栈/仓库），或整块删除 |
 | 7 | 时区（可选） | `assets.yml` 的 `TZ_OFFSET`（默认 `8` = UTC+8） | 时段分布与卡片标注按此时区计算；本地运行用环境变量 `TZ_OFFSET` 传入 |

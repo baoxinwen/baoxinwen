@@ -23,8 +23,13 @@ const OUT_DIR = join(ROOT, 'assets', 'generated');
 /** 静态文案与手工维护内容（改这里即可，无需动渲染器） */
 const CONTENT = {
   hero: {
-    taglines: ['后端工程师 · 自托管工具匠人', '正在学 Rust', '给自己造用得上的工具'],
-    meta: ['blog    浮生闲记', 'focus   self-hosted', 'lang    zh-CN / code', 'rust    learning…'],
+    taglines: [
+      '测试工程师 · 独立开发者',
+      '把复杂系统测得更可靠，也把真实问题做成好用的工具',
+      '正在学 Rust',
+      '给自己造用得上的工具',
+    ],
+    meta: ['blog    浮生闲记', 'focus   quality & tooling', 'lang    zh-CN / code', 'rust    learning…'],
   },
   projects: [
     { name: 'footprint', desc: '私人自托管旅行足迹地图：高德地图记录旅程、照片与时间线，Docker Compose 一键部署', stack: 'Python · Flask · Docker', repo: 'baoxinwen/footprint' },
@@ -32,7 +37,7 @@ const CONTENT = {
     { name: 'hotsearch-monitor', desc: '47 平台中文热搜聚合监控：关键词过滤与趋势分析', stack: 'TypeScript · Docker', repo: 'baoxinwen/hotsearch-monitor' },
     { name: 'PromptMate', desc: '本地优先的跨平台提示词管理桌面工具（Tauri 2 + Vue 3）', stack: 'Rust · Tauri 2 · Vue 3', repo: 'baoxinwen/PromptMate' },
   ],
-  // 站点同源博客卡（视觉参考浮生闲记主题：玫红点缀 + 文章行排版）
+  // 站点同源博客卡（视觉参考浮生闲记主题：冰青点缀 + 文章行排版）
   blog: {
     site: '浮生闲记',
     slogan: '以文字为舟，溯流时光之河',
