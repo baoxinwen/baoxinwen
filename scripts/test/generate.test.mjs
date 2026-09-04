@@ -155,6 +155,21 @@ test('hoursFromEvents 按 UTC+8 归桶', () => {
   assert.equal(hoursFromEvents([{ created_at: 'garbage' }]).reduce((a, b) => a + b, 0), 0);
 });
 
+test('hoursFromEvents：负时区偏移不丢事件（UTC 前段小时归本地前一日晚间桶', () => {
+  // UTC 2 点 = UTC-5 的前一日 21 点；(2-5)%24 在 JS 里是 -3，事件曾被静默丢弃
+  const events = [
+    { created_at: '2026-09-01T02:00:00Z' },
+    { created_at: '2026-09-01T04:30:00Z' },
+    { created_at: '2026-09-01T23:00:00Z' }, // UTC-5 = 18 点
+  ];
+  const hours = hoursFromEvents(events, -5);
+  assert.equal(hours[21], 1);
+  assert.equal(hours[23], 1);
+  assert.equal(hours[18], 1);
+  assert.equal(hours.reduce((a, b) => a + b, 0), 3, '全部事件必须落在 0-23 桶内，不得丢失');
+  assert.equal(Object.keys(hours).length, 24, '不得产生负数下标的扩展属性');
+});
+
 test('eventSpanDays：含首尾天数、封顶 90、空数据为 0', () => {
   assert.equal(eventSpanDays([{ created_at: '2026-09-01T06:00:00Z' }]), 1);
   assert.equal(eventSpanDays([

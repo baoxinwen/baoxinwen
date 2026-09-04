@@ -50,7 +50,8 @@ export function hoursFromEvents(events, tzOffset = TZ_OFFSET) {
   for (const e of events) {
     const d = new Date(e.created_at);
     if (Number.isNaN(d.getTime())) continue;
-    hours[(d.getUTCHours() + tzOffset) % 24]++;
+    // % 保留被除数符号：负偏移会算出负下标静默丢事件，先取模再 +24 归一到 [0,23]
+    hours[((d.getUTCHours() + tzOffset) % 24 + 24) % 24]++;
   }
   return hours;
 }
