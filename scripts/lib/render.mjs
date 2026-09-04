@@ -102,9 +102,12 @@ export function renderLangs(t, langs) {
   const b = [defs + body];
   b.push(text(PAD, 38, 'LANGUAGES · BY REPO', { fill: t.muted, family: FONT_MONO, size: 10, ls: 2 }));
   const barW = RIGHT - PAD;
+  // 按占比总和归一：各段独立四舍五入后总和可为 101~103，
+  // 直接按 /100 缩放会让末段越过内容右缘；归一后条形恰好铺满 [PAD, RIGHT]
+  const totalPct = langs.reduce((a, l) => a + l.pct, 0) || 100;
   let x = PAD;
   langs.forEach((l, i) => {
-    const w = (barW - 2 * (langs.length - 1)) * (l.pct / 100);
+    const w = (barW - 2 * (langs.length - 1)) * (l.pct / totalPct);
     b.push(rect(x, 60, w, 12, { fill: langColor(l.name), rx: 4 }));
     x += (i < langs.length - 1) ? w + 2 : w;
   });

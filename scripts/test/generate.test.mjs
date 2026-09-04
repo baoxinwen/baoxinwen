@@ -531,6 +531,17 @@ test('renderLangs：官方语言色入画', () => {
   assert.match(svg, /#3178c6/);
 });
 
+test('renderLangs：舍入和超过 100% 时按总和归一，堆叠条不越内容右缘', () => {
+  // 真实分布多数段向上取整：6 段各 16.7% → 全 17%，和 102
+  const six = ['TypeScript', 'Python', 'HTML', 'JavaScript', 'Vue', 'CSS'].map((name) => ({ name, pct: 17 }));
+  const svg = renderLangs(TOKENS.light, six);
+  const ends = [...svg.matchAll(/<rect x="([\d.]+)" y="60" width="([\d.]+)"/g)]
+    .map((m) => Number(m[1]) + Number(m[2]));
+  assert.equal(ends.length, 6);
+  const lastEnd = Math.max(...ends);
+  assert.ok(lastEnd <= 786 + 0.5, `末段右缘 ${lastEnd} 应 <= 786（内容右缘 RIGHT）`);
+});
+
 test('renderLangs：行数多时自适应增高，最后一行不贴底边', () => {
   const names = ['TypeScript', 'Python', 'HTML', 'JavaScript', 'Vue', 'CSS', 'Go', 'Rust', 'Shell'];
   const rows = (n) => renderLangs(TOKENS.light, names.slice(0, n).map((name, i) => ({ name, pct: i ? 1 : 92 })));
