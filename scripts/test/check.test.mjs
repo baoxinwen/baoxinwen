@@ -333,6 +333,15 @@ test('缺博客卡引用时失败（blog-sync 已退役，博客区由自绘博�
   assert.ok(r.stdout.includes('博客卡'), r.stdout);
 });
 
+test('无博客的模板采用者：整块删除博客区（含 hd-blog 区块头）后应全绿（TEMPLATE.md 第 8 步）', () => {
+  const f = goodRoot({ after() {} });
+  f.writeReadme(GOOD_README
+    .replace(`${pic('hd-blog', 'width="100%"')}\n\n`, '')
+    .replace(/<p>\n  <a href="https:\/\/xsfly\.com">[\s\S]*?<\/a>\n<\/p>\n\n/, ''));
+  const r = runCheck(f.root);
+  assert.equal(r.status, 0, `无博客采用者不应被判死:\n${r.stdout}${r.stderr}`);
+});
+
 test('1000 个合规 img 的极值输入正常完成（极值类）', () => {
   const f = goodRoot({ after() {} });
   const imgs = Array.from(

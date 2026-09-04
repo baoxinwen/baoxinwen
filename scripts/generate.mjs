@@ -69,18 +69,21 @@ async function main() {
     lang: data.primaryLangByRepo?.[p.repo.split('/')[1].toLowerCase()],
   }));
 
-  // 博客卡为次要数据：RSS 失败只告警并跳过该卡（保留上次产物），不阻塞其它卡片更新
+  // 博客卡为次要数据：RSS 失败只告警并跳过该卡（保留上次产物），不阻塞其它卡片更新；
+  // CONTENT.blog 被整块删除（TEMPLATE.md 替换点 8 的无博客配置）时同样显式跳过
   let blog = null;
-  try {
-    blog = {
-      site: CONTENT.blog.site,
-      slogan: CONTENT.blog.slogan,
-      url: CONTENT.blog.url,
-      posts: await fetchBlogPosts({ rssUrl: CONTENT.blog.rss, tzOffset }),
-    };
-    console.log(`[info] 博客卡：已取到 ${blog.posts.length} 篇文章`);
-  } catch (e) {
-    console.warn(`[warn] 博客 RSS 获取失败，跳过博客卡（线上保留上次产物）: ${e.message}`);
+  if (CONTENT.blog) {
+    try {
+      blog = {
+        site: CONTENT.blog.site,
+        slogan: CONTENT.blog.slogan,
+        url: CONTENT.blog.url,
+        posts: await fetchBlogPosts({ rssUrl: CONTENT.blog.rss, tzOffset }),
+      };
+      console.log(`[info] 博客卡：已取到 ${blog.posts.length} 篇文章`);
+    } catch (e) {
+      console.warn(`[warn] 博客 RSS 获取失败，跳过博客卡（线上保留上次产物）: ${e.message}`);
+    }
   }
 
   const bundle = renderAll({ tokens: TOKENS, hero: { user, ...CONTENT.hero }, projects, blog, ...data });

@@ -176,11 +176,15 @@ function main() {
       for (const n of onlyDark) fail(`自绘资产 ${n} 只有 dark 引用，缺 light 配对`);
       if (!onlyLight.length && !onlyDark.length) ok(`自绘资产 ${light.size} 组深浅成对`);
 
-      // 博客卡：blog-sync 已退役（2026-09），文章列表由生成器拉 RSS 渲染为自绘博客卡
-      if (!refs.some((u) => /^assets\/generated\/blog\.(light|dark)\.svg$/.test(u))) {
-        fail('README 未引用博客卡 assets/generated/blog.{light,dark}.svg（博客手记区应由生成器产出的自绘博客卡组成）');
-      } else {
-        ok('博客卡引用就绪');
+      // 博客卡：blog-sync 已退役（2026-09），文章列表由生成器拉 RSS 渲染为自绘博客卡。
+      // 以 hd-blog 区块头为前提做条件校验：头在卡必须在（半删状态判红）；
+      // 整块删除 = 无博客采用者的合法配置（TEMPLATE.md 替换点 8），不判死
+      if (refs.some((u) => /^assets\/generated\/hd-blog\.(light|dark)\.svg$/.test(u))) {
+        if (!refs.some((u) => /^assets\/generated\/blog\.(light|dark)\.svg$/.test(u))) {
+          fail('README 有博客区块头（hd-blog）但未引用博客卡 assets/generated/blog.{light,dark}.svg（博客手记区应由生成器产出的自绘博客卡组成；无博客则整块删除）');
+        } else {
+          ok('博客卡引用就绪');
+        }
       }
     }
 
