@@ -117,14 +117,17 @@ export function renderLangs(t, langs) {
     b.push(rect(x, 60, w, 12, { fill: langColor(l.name), rx: 4 }));
     x += (i < langs.length - 1) ? w + 2 : w;
   });
+  // 图例两列均分内容宽(列间 48px 呼吸位),百分比右缘对齐各自列缘,与上方通栏堆叠条同宽
+  const legendGutter = 48;
+  const legendColW = (RIGHT - PAD - legendGutter) / 2;
   langs.forEach((l, i) => {
     const col = i % 2, row = (i - col) / 2;
-    const lx = PAD + col * 381, ly = 106 + row * 26;
+    const lx = PAD + col * (legendColW + legendGutter), ly = 106 + row * 26;
     const color = langColor(l.name);
     b.push(`<circle cx="${lx + 4.5}" cy="${ly - 4.5}" r="4.5" fill="${color}"/>`);
     b.push(text(lx + 17, ly, l.name, { fill: t.body, size: 12.5 }));
-    b.push(hline(lx + 17 + textWidth(l.name, 12.5) + 10, lx + 148, ly - 4, t.hair));
-    b.push(text(lx + 190, ly, `${l.pct}%`, { fill: t.muted, family: FONT_MONO, size: 11, anchor: 'end' }));
+    b.push(hline(lx + 17 + textWidth(l.name, 12.5) + 10, lx + legendColW - 42, ly - 4, t.hair));
+    b.push(text(lx + legendColW, ly, `${l.pct}%`, { fill: t.muted, family: FONT_MONO, size: 11, anchor: 'end' }));
   });
   return svgWrap(W, h, b.join(''), '语言构成');
 }
