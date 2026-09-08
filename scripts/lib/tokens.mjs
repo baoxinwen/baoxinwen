@@ -24,7 +24,7 @@ export const TOKENS = {
     border: '#E2E6EE', // 发丝描边
     ink: '#0E1524',
     body: '#46506B',
-    muted: '#8791A8',
+    muted: '#6B7590', // mono 标注 / 辅助说明（对白底 4.59:1，WCAG AA 正文线）
     hair: '#EAEDF3', // 卡内分隔线
     accent: '#0E7490', // 冰青强调:编号、链接、峰值、状态点
     soft: 'rgba(14,116,144,0.16)', // 直方图非峰值柱(accent 同相低透明)
@@ -40,7 +40,7 @@ export const TOKENS = {
     border: 'rgba(255,255,255,0.09)',
     ink: '#F2F5FA',
     body: '#BFC8DA',
-    muted: '#76819A',
+    muted: '#8590AA', // mono 标注 / 辅助说明（对深色卡面 5.35:1，WCAG AA 正文线）
     hair: 'rgba(255,255,255,0.10)',
     accent: '#22D3EE',
     soft: 'rgba(34,211,238,0.20)',
