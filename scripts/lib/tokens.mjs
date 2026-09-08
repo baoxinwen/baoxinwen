@@ -165,15 +165,19 @@ const WIDE_RE = /[\u2E80-\u9FFF\uF900-\uFFEF\u3000-\u303F“”‘’…—·]/;
 export const isWideChar = (ch) => WIDE_RE.test(ch);
 export const visLen = (s) => [...s].reduce((n, ch) => n + (isWideChar(ch) ? 2 : 1), 0);
 
-/** CJK 感知的近似换行(maxUnits 为全角单位数) */
+/** CJK 感知的近似换行(maxUnits 为全角单位数)。
+ * 连续 ASCII 词元(含 . _ + # - 连接符)不拆行,避免 ".gitignore" 一类词中断行;
+ * 单词元超过整行宽时回退为逐字断行。 */
 export function wrapCJK(str, maxUnits) {
   const rows = [];
   let cur = '', curU = 0;
-  for (const ch of str) {
-    const u = visLen(ch) / 2;
-    if (curU + u > maxUnits && cur) { rows.push(cur); cur = ch; curU = u; }
-    else { cur += ch; curU += u; }
-  }
+  const place = (tok) => {
+    const u = visLen(tok) / 2;
+    if (u > maxUnits) { for (const ch of tok) place(ch); return; }
+    if (curU + u > maxUnits && cur) { rows.push(cur); cur = tok; curU = u; }
+    else { cur += tok; curU += u; }
+  };
+  for (const tok of str.match(/[\w.+#-]+|[\s\S]/g) ?? []) place(tok);
   if (cur) rows.push(cur);
   return rows;
 }
