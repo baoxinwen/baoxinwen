@@ -10,7 +10,7 @@
 ```js
 export const TOKENS = {
   light: { card: '#FFFFFF', cardOpacity: 0.6, border: '#E2E6EE', ink: '#0E1524', body: '#46506B',
-           muted: '#6B7590', hair: '#EAEDF3', accent: '#0E7490', soft: 'rgba(14,116,144,0.16)',
+           muted: '#6B7590', hair: '#EAEDF3', accent: '#0E7490', soft: 'rgba(14,116,144,0.30)',
            glowA: 'rgba(124,92,255,0.20)', glowB: 'rgba(45,212,167,0.16)',
            innerHi: 'rgba(255,255,255,0)', shadowColor: '#0E7490', shadowOpacity: [0.05, 0.04] },
   dark:  { /* 同一组键，深色取值 */ },
