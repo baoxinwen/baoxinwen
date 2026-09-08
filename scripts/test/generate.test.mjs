@@ -447,17 +447,18 @@ test('卡片投影 filter 每个资产只定义一次（defs 重复 push 回归�
   }
 });
 
-test('区块头发丝线起点按 CJK 感知宽度估算（混排标题不留大空隙）', () => {
+test('区块头发丝线起点按 CJK/拉丁分段估宽（间隙恒定 ≈22px，混排不留大空隙）', () => {
   const all = renderAll(RENDER_INPUT);
-  // “GitHub 数据” visLen=11：期望起点 66 + 11×14.5×0.72 + 22 ≈ 203
+  // “GitHub 数据”：66 + 7×14.5×0.6 + 2×14.5 + 22 ≈ 177.9
+  // （2026-09-09 起 CJK 记 1.0 字号、其余 0.6；旧全角×0.72 估法得 ~203，间隙虚大 40~55px）
   const hd = all.find((a) => a.name === 'hd-data' && a.mode === 'light').svg;
   const m = hd.match(/<line x1="([\d.]+)" y1="24"/);
   const x1 = Number(m[1]);
-  assert.ok(x1 > 190 && x1 < 216, `发丝线起点应为 ~203，实际 ${x1}`);
-  // 纯 CJK 标题（关于：66 + 4×10.44 + 22 ≈ 129.8）
+  assert.ok(x1 > 170 && x1 < 186, `发丝线起点应为 ~178，实际 ${x1}`);
+  // 纯 CJK 标题（关于：66 + 2×14.5 + 22 = 117，与混排标题同取 22px 间隙）
   const about = all.find((a) => a.name === 'hd-about' && a.mode === 'light').svg;
   const m2 = about.match(/<line x1="([\d.]+)" y1="24"/);
-  assert.ok(Number(m2[1]) > 122 && Number(m2[1]) < 138, `关于头发丝线起点异常: ${m2[1]}`);
+  assert.ok(Number(m2[1]) > 110 && Number(m2[1]) < 124, `关于头发丝线起点异常: ${m2[1]}`);
 });
 
 test('页脚与 hero 年份取当前年份（不硬编码）', () => {

@@ -6,14 +6,15 @@
  */
 import {
   W, PAD, FONT_SANS, FONT_MONO, langColor, EASE_IN_OUT, GLASS_MOTION_CSS,
-  svgWrap, text, rect, hline, vline, glassSurface, typeRotator, wrapCJK, visLen, truncateCJK, esc,
+  svgWrap, text, rect, hline, vline, glassSurface, typeRotator, wrapCJK, visLen, isWideChar, truncateCJK, esc,
 } from './tokens.mjs';
 
 const RIGHT = W - PAD; // 内容右缘 786
 const YEAR = new Date().getFullYear();
 
-/** 600 字重中英混排的经验宽度:visLen 全角单位 × 字号 × k */
-const textWidth = (str, size, k = 0.6) => visLen(str) * size * k;
+/** 混排经验宽度:CJK 记 1.0 字号、其余记 k,供发丝线起点/图例引线等排版估算 */
+const textWidth = (str, size, k = 0.6) =>
+  [...str].reduce((n, ch) => n + (isWideChar(ch) ? size : size * k), 0);
 
 /** 脉冲状态点:CSS 呼吸动画(自定义 ease-in-out),reduced-motion 下静止 */
 function pulseDot(cx, cy, r, fill) {
@@ -71,8 +72,8 @@ export function renderHeader(t, num, title) {
   const b = [
     text(PAD, 28, num, { fill: t.accent, family: FONT_MONO, size: 11, weight: 700 }),
     text(PAD + 22, 28, title, { fill: t.ink, size: 14.5, weight: 600 }),
-    // 起点按 CJK 感知宽度估算(title.length 对混排标题失准)
-    hline(PAD + 22 + textWidth(title, 14.5, 0.72) + 22, RIGHT, 24, t.hair),
+    // 起点按 CJK/拉丁分段估宽,间隙恒定 ≈22px(title.length 对混排标题失准)
+    hline(PAD + 22 + textWidth(title, 14.5) + 22, RIGHT, 24, t.hair),
   ];
   return svgWrap(W, 44, b.join(''), `第 ${num} 节 ${title}`);
 }

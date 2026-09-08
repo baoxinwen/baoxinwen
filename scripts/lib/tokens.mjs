@@ -161,8 +161,9 @@ export function glassSurface(t, uid, w = W, h = 100, { rx = 20, glow = [] } = {}
 }
 
 /** 视觉宽度:CJK 记 2 个等宽格,其余记 1 */
-export const visLen = (s) =>
-  [...s].reduce((n, ch) => n + (/[\u2E80-\u9FFF\uF900-\uFFEF\u3000-\u303F“”‘’…—·]/.test(ch) ? 2 : 1), 0);
+const WIDE_RE = /[\u2E80-\u9FFF\uF900-\uFFEF\u3000-\u303F“”‘’…—·]/;
+export const isWideChar = (ch) => WIDE_RE.test(ch);
+export const visLen = (s) => [...s].reduce((n, ch) => n + (isWideChar(ch) ? 2 : 1), 0);
 
 /** CJK 感知的近似换行(maxUnits 为全角单位数) */
 export function wrapCJK(str, maxUnits) {
