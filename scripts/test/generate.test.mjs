@@ -61,6 +61,16 @@ test('wrapCJK 按全角单位断行且不丢字', () => {
   assert.equal(wrapCJK('', 10).join(''), '');
 });
 
+test('wrapCJK：拉丁词元不拆行，超长词元回退逐字断行', () => {
+  // “.gitignore” 整词移至下行，不在 .git / ignore 处断开（2026-09-09）
+  const rows = wrapCJK('支持 .gitignore 过滤', 6);
+  assert.equal(rows.join(''), '支持 .gitignore 过滤');
+  assert.ok(rows.some((r) => r.trim() === '.gitignore'), `词元应整体移行: ${JSON.stringify(rows)}`);
+  const long = wrapCJK('a'.repeat(15), 10);
+  assert.equal(long.join(''), 'a'.repeat(15));
+  assert.ok(long.every((r) => visLen(r) / 2 <= 10), '回退断行后每行不超宽');
+});
+
 test('typeRotator：CSS 动画 + 自定义曲线 + 负相位延迟 + reduced-motion 降级', () => {
   const svg = typeRotator(10, 20, ['甲', '乙'], { fill: '#000' });
   // CSS 而非 SMIL（SMIL 无法响应 prefers-reduced-motion）
@@ -481,7 +491,7 @@ test('时段图标签反映真实跨度：有数据显示天数，降级显示�
   assert.match(degraded, /活跃时段 · 近期公开活动/);
 });
 
-test('卡片投影：浅色玻璃卡带紫调柔影，深色不用投影（靠描边 + 内高光分层）', () => {
+test('卡片投影：浅色玻璃卡带青调柔影，深色不用投影（靠描边 + 内高光分层）', () => {
   const all = renderAll(RENDER_INPUT);
   const light = all.find((a) => a.name === 'hero' && a.mode === 'light').svg;
   const dark = all.find((a) => a.name === 'hero' && a.mode === 'dark').svg;

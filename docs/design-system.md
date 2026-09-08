@@ -11,8 +11,8 @@
 
 1. 统一宽度节奏：全宽卡 830px（与 GitHub README 内容列同宽），内容左右内边距 44px（项目卡 30px）
 2. 玻璃卡面：半透明白（浅色 60%、深色 4.5%）+ 1px 发丝描边 + 上缘内高光（深色），
-   圆角 20（项目卡 18）；**深色不用投影**，层次靠描边与卡面透过率；浅色用紫调柔影（带色阴影，不用纯黑）
-3. 光晕语言：hero 双粒（紫罗兰 + 翠绿，漂移动画）；stats / streak / project 各一粒静态小光晕；
+   圆角 20（项目卡 18）；**深色不用投影**，层次靠描边与卡面透过率；浅色用青调柔影（带色阴影，不用纯黑）
+3. 光晕语言：hero 双粒（青 + 冰蓝，漂移动画）；stats / streak / project 各一粒静态小光晕；
    langs / blog / 区块头 / 页脚保持安静。光晕永远在卡面之下，只作氛围不作信息
 4. 统一灰阶 + 单一强调色（冰青 `accent`，2026-09-03 用户选定，全页无品牌色例外）；GitHub 官方语言色（linguist）仅用于语言构成
 5. 深/浅双 token，每张卡产出一对 SVG，README 用 `<picture>` + `prefers-color-scheme` 自动切换（与贪吃蛇一致）
@@ -45,16 +45,16 @@
 
 | 组件 | 尺寸 | 要点 |
 |---|---|---|
-| `hero` | 830×232 | 双粒光晕（右上紫、左下绿，`gl1`/`gl2` 漂移动画）+ mono kicker `BAOXINWEN / GITHUB` + 42px/700 姓名 + 文案轮换（CSS 交叉淡化，负相位错开）+ 右侧 meta 表（发丝竖线）+ 脉冲状态点 `open to build` |
+| `hero` | 830×232 | 双粒光晕（右上青、左下冰蓝，`gl1`/`gl2` 漂移动画）+ mono kicker `BAOXINWEN / GITHUB` + 42px/700 姓名 + 文案轮换（CSS 交叉淡化，负相位错开）+ 右侧 meta 表（发丝竖线）+ 脉冲状态点 `open to build` |
 | `hd-*` 区块头 ×5 | 830×44 | `01` accent mono + 标题 14.5/600 + 发丝线延伸至右缘（**扁平，不套卡**；起点按 CJK 感知宽度估算） |
-| `stats` | 830×156 | 五列大数字 30/700（单位 tspan 17/500，`tabular-nums`），mono 标签，列间发丝竖线；右上角一粒静态紫光晕；顶部 `LAST 365 DAYS · UTC±N` |
+| `stats` | 830×156 | 五列大数字 30/700（单位 tspan 17/500，`tabular-nums`），mono 标签，列间发丝竖线；右上角一粒静态青光晕；顶部 `LAST 365 DAYS · UTC±N` |
 | `langs` | 830×H（≥130） | 单条堆叠条（官方语言色，2px 缝隙，rx4）+ 两列图例（圆点 + 名称 + 引线 + 百分比）；图例行自适应增高：首行基线 106、行距 26、基线下 24px 底边距 |
-| `streak` | 830×180 | 左：当前连击 / 最长连击 / 最佳单日（大数字 + 中文标签 + mono 英文）；右：24h 直方图（`soft` 柱 + `accent` 峰值），小时刻度 00/06/12/18/23；右下角一粒静态绿光晕；跨度标注按 events 真实覆盖天数显示 |
-| `project-*` ×4 | 405×156 | 2×2 网格：项目名 17.5/700 + 右上 `01 / 04` 编号 + 两行描述 + 主语言色点（linguist 色）+ mono 技术栈 + `→ repo` accent 链接；右上角一粒淡紫光晕；README 中包 `<a>` 跳转仓库 |
+| `streak` | 830×180 | 左：当前连击 / 最长连击 / 最佳单日（大数字 + 中文标签 + mono 英文）；右：24h 直方图（`soft` 柱 + `accent` 峰值），小时刻度 00/06/12/18/23；右下角一粒静态冰蓝光晕；跨度标注按 events 真实覆盖天数显示 |
+| `project-*` ×4 | 405×156 | 2×2 网格：项目名 17.5/700 + 右上 `01 / 04` 编号 + 两行描述 + 主语言色点（linguist 色）+ mono 技术栈 + `→ repo` accent 链接；右上角一粒淡青光晕；README 中包 `<a>` 跳转仓库 |
 | `blog` | 830×210 | 博客卡：`BLOG ·` mono + 站名（accent 色）+ 右侧站点标语 + 5 行最近文章（mono 日期 + 标题单行截断，行距 26）+ 右下 `→ url` accent 链接；README 中整卡包 `<a>` 跳博客首页 |
 | `footer` | 830×64 | 发丝线 + `© 当前年份`（动态）+ `rendered by github actions`（裸排，不套卡） |
 
-**玻璃卡面**（`glassSurface` 原语）：光晕（卡后，feGaussianBlur）→ 半透明卡面（`card` × `cardOpacity`，发丝描边）→ 上缘内高光（深色）；浅色另叠双层紫调柔影（`feDropShadow`，filter id 按 `sh-{uid}` 命名空间隔离，每张 SVG 只定义一次）。深色 `shadowOpacity=[0,0]` 时不输出投影 filter。
+**玻璃卡面**（`glassSurface` 原语）：光晕（卡后，feGaussianBlur）→ 半透明卡面（`card` × `cardOpacity`，发丝描边）→ 上缘内高光（深色）；浅色另叠双层青调柔影（`feDropShadow`，filter id 按 `sh-{uid}` 命名空间隔离，每张 SVG 只定义一次）。深色 `shadowOpacity=[0,0]` 时不输出投影 filter。
 
 **动效规格**（对齐 emil 动效标准：只动 `opacity`/`transform`，全部包 `prefers-reduced-motion` 降级；动画集中在 hero，其余卡静态）：
 - 文案轮换：CSS keyframes 交叉淡化，`cubic-bezier(0.77, 0, 0.175, 1)`（强化版 ease-in-out），负 `animation-delay` 错相，单条停留约 2.4s；reduced-motion 下停轮换只显首条
