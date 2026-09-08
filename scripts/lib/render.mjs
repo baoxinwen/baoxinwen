@@ -24,15 +24,15 @@ function pulseDot(cx, cy, r, fill) {
   );
 }
 
-/** 大数字 + 可选中/英文单位:单位小一号并降透明,与数字同基线居中 */
-function bigNumber(cx, y, v, { fill, size, unitSize }) {
+/** 大数字 + 可选中/英文单位:单位小一号并降透明,与数字同基线居中;anchor 默认居中(stats 五列),左对齐场景显式传 start(streak 左列) */
+function bigNumber(cx, y, v, { fill, size, unitSize, anchor = 'middle' }) {
   const m = /^(-?[\d.,]+)(.*)$/.exec(String(v));
   if (!m || !m[2].trim()) {
-    return text(cx, y, String(v), { fill, size, weight: 700, anchor: 'middle', ls: -0.3, style: 'font-variant-numeric:tabular-nums' });
+    return text(cx, y, String(v), { fill, size, weight: 700, anchor, ls: -0.3, style: 'font-variant-numeric:tabular-nums' });
   }
   const unit = m[2].trim();
   return text(cx, y, `${m[1]} `, {
-    fill, size, weight: 700, anchor: 'middle', ls: -0.3,
+    fill, size, weight: 700, anchor, ls: -0.3,
     style: 'font-variant-numeric:tabular-nums', raw: true,
   }).replace(
     '</text>',
@@ -137,7 +137,7 @@ export function renderStreakHours(t, streak, hours, { tz = 8, spanDays = null } 
   b.push(text(PAD, 38, `STREAK & HOURS · UTC${tz >= 0 ? '+' : ''}${tz}`, { fill: t.muted, family: FONT_MONO, size: 10, ls: 2 }));
   streak.forEach((s, i) => {
     const y = 68 + i * 38;
-    b.push(bigNumber(44, y + 12, s.v, { fill: t.ink, size: 21, unitSize: 14 }));
+    b.push(bigNumber(44, y + 12, s.v, { fill: t.ink, size: 21, unitSize: 14, anchor: 'start' }));
     b.push(text(130, y + 11, s.label, { fill: t.body, size: 12.5 }));
     b.push(text(130, y + 25, s.en, { fill: t.muted, family: FONT_MONO, size: 9.5, ls: 1 }));
   });
