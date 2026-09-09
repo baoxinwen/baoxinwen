@@ -223,9 +223,10 @@ export function renderAll(data) {
     { v: String(data.repos), label: 'REPOS' },
     { v: String(data.activeDays), label: 'ACTIVE DAYS' },
   ];
+  // 连击单位（天）由标签语义承载，数字裸排保数位列对齐（stats 卡同风格）
   const streak = [
-    { v: `${data.current} 天`, label: '当前连击', en: 'current streak' },
-    { v: `${data.longest} 天`, label: '最长连击', en: 'longest streak' },
+    { v: String(data.current), label: '当前连击', en: 'current streak' },
+    { v: String(data.longest), label: '最长连击', en: 'longest streak' },
     { v: String(data.bestDay), label: '最佳单日', en: 'best day' },
   ];
   const hours = data.hours ?? Array(24).fill(0);
