@@ -141,8 +141,9 @@ export function renderStreakHours(t, streak, hours, { tz = 8, spanDays = null } 
   b.push(text(PAD, 38, `STREAK & HOURS · UTC${tz >= 0 ? '+' : ''}${tz}`, { fill: t.muted, family: FONT_MONO, size: 10, ls: 2 }));
   streak.forEach((s, i) => {
     const y = 68 + i * 38;
-    // 数字簇右对齐于 x=104（距标签列 26px）：表行布局中数字列靠标签侧对齐，个位竖直成线
-    b.push(bigNumber(104, y + 12, s.v, { fill: t.ink, size: 21, unitSize: 14, anchor: 'end' }));
+    // 数字簇右对齐于 x=104（距标签列 26px）；基线 y+21 使数字垂直居中于
+    // 「中文+英文」双行标签块（块跨 y+0~y+27，中心 y≈13.5；数字高 15px）
+    b.push(bigNumber(104, y + 21, s.v, { fill: t.ink, size: 21, unitSize: 14, anchor: 'end' }));
     b.push(text(130, y + 11, s.label, { fill: t.body, size: 12.5 }));
     b.push(text(130, y + 25, s.en, { fill: t.muted, family: FONT_MONO, size: 9.5, ls: 1 }));
   });
