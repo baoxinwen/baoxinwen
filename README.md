@@ -61,7 +61,7 @@
       <img src="assets/generated/project-1.light.svg" alt="footprint：私人自托管旅行足迹地图" width="405" />
     </picture>
   </a>
-  <a href="https://github.com/baoxinwen/CopyTree">
+  <a href="https://github.com/baoxinwen/copy-tree">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/generated/project-2.dark.svg" />
       <img src="assets/generated/project-2.light.svg" alt="CopyTree：Windows 右键复制目录树" width="405" />

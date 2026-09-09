@@ -33,7 +33,7 @@ const CONTENT = {
   },
   projects: [
     { name: 'footprint', desc: '私人自托管旅行足迹地图：高德地图记录旅程、照片与时间线，Docker Compose 一键部署', stack: 'Python · Flask · Docker', repo: 'baoxinwen/footprint' },
-    { name: 'CopyTree', desc: 'Windows 右键复制目录树为 7 种格式，支持 .gitignore 过滤', stack: 'Python · tkinter', repo: 'baoxinwen/CopyTree' },
+    { name: 'CopyTree', desc: 'Windows 右键复制目录树为 7 种格式，支持 .gitignore 过滤', stack: 'Python · tkinter', repo: 'baoxinwen/copy-tree' },
     { name: 'hotsearch-monitor', desc: '47 平台中文热搜聚合监控：关键词过滤与趋势分析', stack: 'TypeScript · Docker', repo: 'baoxinwen/hotsearch-monitor' },
     { name: 'PromptMate', desc: '本地优先的跨平台提示词管理桌面工具（Tauri 2 + Vue 3）', stack: 'Rust · Tauri 2 · Vue 3', repo: 'baoxinwen/PromptMate' },
   ],
