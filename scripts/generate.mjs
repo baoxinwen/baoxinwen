@@ -31,11 +31,14 @@ const CONTENT = {
     ],
     meta: ['blog    浮生闲记', 'focus   quality & tooling', 'lang    zh-CN / code', 'rust    learning…'],
   },
+  // 描述按卡片两行版面裁剪（≤44 个全角单位），完整长描述以仓库 About 为准
   projects: [
-    { name: 'footprint', desc: '私人自托管旅行足迹地图：高德地图记录旅程、照片与时间线，Docker Compose 一键部署', stack: 'Python · Flask · Docker', repo: 'baoxinwen/footprint' },
-    { name: 'CopyTree', desc: 'Windows 右键复制目录树为 7 种格式，支持 .gitignore 过滤', stack: 'Python · tkinter', repo: 'baoxinwen/copy-tree' },
-    { name: 'hotsearch-monitor', desc: '47 平台中文热搜聚合监控：关键词过滤与趋势分析', stack: 'TypeScript · Docker', repo: 'baoxinwen/hotsearch-monitor' },
-    { name: 'PromptMate', desc: '本地优先的跨平台提示词管理桌面工具（Tauri 2 + Vue 3）', stack: 'Rust · Tauri 2 · Vue 3', repo: 'baoxinwen/PromptMate' },
+    { name: 'meme-maker', desc: '纯浏览器端表情包生成器：选模板、上传头像、加文字，一键生成 PNG / GIF，不上传服务器', stack: 'TypeScript · React · Vite', repo: 'baoxinwen/meme-maker' },
+    { name: 'prompt-tool', desc: '本地优先的 Windows 提示词管理工具：全局热键呼出、剪贴板历史、变量占位符', stack: 'Rust · Tauri 2 · Vue 3', repo: 'baoxinwen/prompt-tool' },
+    { name: 'home-stock', desc: '家庭自托管库存助手：物品开封管理、购物清单转库存、临期过期提醒与浪费统计', stack: 'TypeScript · NestJS · SQLite', repo: 'baoxinwen/home-stock' },
+    { name: 'renovation-expenses', desc: '装修账本：清单式预算管理 + 定金尾款跟踪 + 票据留存，数据 100% 本地自托管', stack: 'JavaScript · Fastify', repo: 'baoxinwen/renovation-expenses' },
+    { name: 'copy-tree', desc: 'Windows 右键一键复制目录树到剪贴板，支持 7 种输出格式与 .gitignore / glob 过滤', stack: 'Python · tkinter', repo: 'baoxinwen/copy-tree' },
+    { name: 'idle-fish', desc: '铝型材机柜报价工具：报价 / 订单 / 3D 预览 / 经营统计，PWA 单用户自部署', stack: 'TypeScript · React · Three.js', repo: 'baoxinwen/idle-fish' },
   ],
   // 站点同源博客卡（视觉参考浮生闲记主题：冰青点缀 + 文章行排版）
   blog: {

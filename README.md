@@ -55,31 +55,46 @@
 </picture>
 
 <p>
-  <a href="https://github.com/baoxinwen/footprint">
+  <a href="https://github.com/baoxinwen/meme-maker">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/generated/project-1.dark.svg" />
-      <img src="assets/generated/project-1.light.svg" alt="footprint：私人自托管旅行足迹地图" width="405" />
+      <img src="assets/generated/project-1.light.svg" alt="meme-maker：纯浏览器端表情包生成器" width="405" />
     </picture>
   </a>
-  <a href="https://github.com/baoxinwen/copy-tree">
+  <a href="https://github.com/baoxinwen/prompt-tool">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/generated/project-2.dark.svg" />
-      <img src="assets/generated/project-2.light.svg" alt="CopyTree：Windows 右键复制目录树" width="405" />
+      <img src="assets/generated/project-2.light.svg" alt="prompt-tool：本地优先的 Windows 提示词管理工具" width="405" />
     </picture>
   </a>
 </p>
 
 <p>
-  <a href="https://github.com/baoxinwen/hotsearch-monitor">
+  <a href="https://github.com/baoxinwen/home-stock">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/generated/project-3.dark.svg" />
-      <img src="assets/generated/project-3.light.svg" alt="hotsearch-monitor：47 平台中文热搜聚合监控" width="405" />
+      <img src="assets/generated/project-3.light.svg" alt="home-stock：家庭自托管库存助手" width="405" />
     </picture>
   </a>
-  <a href="https://github.com/baoxinwen/PromptMate">
+  <a href="https://github.com/baoxinwen/renovation-expenses">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="assets/generated/project-4.dark.svg" />
-      <img src="assets/generated/project-4.light.svg" alt="PromptMate：本地优先的提示词管理桌面工具" width="405" />
+      <img src="assets/generated/project-4.light.svg" alt="renovation-expenses：装修账本，数据 100% 本地自托管" width="405" />
+    </picture>
+  </a>
+</p>
+
+<p>
+  <a href="https://github.com/baoxinwen/copy-tree">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/generated/project-5.dark.svg" />
+      <img src="assets/generated/project-5.light.svg" alt="copy-tree：Windows 右键一键复制目录树" width="405" />
+    </picture>
+  </a>
+  <a href="https://github.com/baoxinwen/idle-fish">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="assets/generated/project-6.dark.svg" />
+      <img src="assets/generated/project-6.light.svg" alt="idle-fish：铝型材机柜报价工具" width="405" />
     </picture>
   </a>
 </p>
