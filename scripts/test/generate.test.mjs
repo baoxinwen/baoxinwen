@@ -536,6 +536,18 @@ test('项目卡：编号、主语言色点（无语言则省略）', () => {
   assert.ok(!p2.includes('cx="33.5"'), '无主语言时不画色点');
 });
 
+test('项目卡：描述超两行时第二行以省略号收尾，不静默截断', () => {
+  const input = {
+    ...RENDER_INPUT,
+    projects: [{ name: 'long-desc', desc: '很长的项目描述'.repeat(30), stack: 'TypeScript', repo: 'baoxinwen/long-desc' }],
+  };
+  const all = renderAll(input);
+  const p1 = all.find((a) => a.name === 'project-1' && a.mode === 'light').svg;
+  assert.match(p1, /…<\/text>/, '第二行应以省略号收尾');
+  const descLines = p1.match(/<text x="30" y="(?:74|92)"[^>]*>[^<]*<\/text>/g) ?? [];
+  assert.equal(descLines.length, 2, '仍只渲染两行描述');
+});
+
 test('renderStats：真实数字入画，零值正常渲染', () => {
   const svg = renderStats(TOKENS.light, [
     { v: '0', label: 'STARS' }, { v: '865', label: 'CONTRIBS / YR' },

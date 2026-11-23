@@ -173,7 +173,12 @@ export function renderProject(t, p, i, total) {
   const b = [defs + body];
   b.push(text(30, 46, p.name, { fill: t.ink, size: 17.5, weight: 700, ls: -0.2 }));
   b.push(text(375, 46, `${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`, { fill: t.muted, family: FONT_MONO, size: 9.5, anchor: 'end' }));
-  wrapCJK(p.desc, 22).slice(0, 2).forEach((line, k) =>
+  // 两行版面放不下时第二行以省略号收尾，不留静默断句（全文可经卡上仓库链接到达）
+  const descRows = wrapCJK(p.desc, 22);
+  const rows = descRows.length > 2
+    ? [descRows[0], truncateCJK(p.desc.slice(descRows[0].length), 21, '…')]
+    : descRows;
+  rows.forEach((line, k) =>
     b.push(text(30, 74 + k * 18, line, { fill: t.body, size: 12 })));
   if (p.lang) {
     b.push(`<circle cx="33.5" cy="141" r="3.5" fill="${langColor(p.lang)}"/>`);
